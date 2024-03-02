@@ -1,7 +1,7 @@
 from pybricks.parameters import Button, Direction, Port
-from pybricks.pupdevices import Motor, Remote
+from pybricks.pupdevices import Light, Motor, Remote
 from pybricks.robotics import Car
-from pybricks.tools import wait
+from pybricks.tools import wait, StopWatch
 
 remote = Remote()
 
@@ -10,6 +10,13 @@ motor_rear = Motor(Port.B, Direction.CLOCKWISE)
 motor_steer = Motor(Port.D, Direction.CLOCKWISE)
 
 car = Car(motor_steer, [motor_front, motor_rear])
+
+light = Light(Port.C)
+watch = StopWatch()
+
+light_cycle = [0, 10, 60, 100]
+light_level = 0
+light_pressed = 0
 
 while True:
     pressed = remote.buttons.pressed()
@@ -28,4 +35,19 @@ while True:
         power -= 100
     car.drive_power(power)
 
-    wait(10)
+    if Button.LEFT in pressed:
+        now = watch.time()
+
+        if now - light_pressed < 250:
+            continue
+
+        light_pressed = now
+
+        light_level += 1
+        light_level = light_level % len(light_cycle)
+        brightness = light_cycle[light_level]
+
+        if brightness == 0:
+            light.off()
+        else:
+            light.on(brightness)
