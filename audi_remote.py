@@ -1,8 +1,10 @@
-from pybricks.parameters import Button, Direction, Port
+from pybricks.hubs import TechnicHub
+from pybricks.parameters import Button, Color, Direction, Port
 from pybricks.pupdevices import Light, Motor, Remote
 from pybricks.robotics import Car
 from pybricks.tools import wait, StopWatch
 
+hub = TechnicHub()
 remote = Remote()
 
 motor_front = Motor(Port.A, Direction.CLOCKWISE)
@@ -17,6 +19,9 @@ watch = StopWatch()
 light_cycle = [0, 10, 60, 100]
 light_level = 0
 light_pressed = 0
+
+hub.light.on(Color.GREEN)
+remote.light.on(Color.GREEN)
 
 while True:
     pressed = remote.buttons.pressed()
